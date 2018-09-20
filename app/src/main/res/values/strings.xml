@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PinHub</string>
     <string name="title_activity_main">Main</string>
+    <string name="title_discover">Discover</string>
+    <string name="title_near_me">Near Me</string>
+    <string name="title_search">Search</string>
 </resources>
