@@ -41,29 +41,29 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void HandleNavigationSwitching(BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_discover:
-                                mapFragment.getView().setVisibility(View.VISIBLE);
-                                templateNearMe.setVisibility(View.GONE);
-                                templateSearch.setVisibility(View.GONE);
-                                break;
-                            case R.id.action_near_me:
-                                mapFragment.getView().setVisibility(View.GONE);
-                                templateNearMe.setVisibility(View.VISIBLE);
-                                templateSearch.setVisibility(View.GONE);
-                                break;
-                            case R.id.action_search:
-                                mapFragment.getView().setVisibility(View.GONE);
-                                templateNearMe.setVisibility(View.GONE);
-                                templateSearch.setVisibility(View.VISIBLE);
-                                break;
-                        }
-                        return false;
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_discover:
+                            mapFragment.getView().setVisibility(View.VISIBLE);
+                            templateNearMe.setVisibility(View.GONE);
+                            templateSearch.setVisibility(View.GONE);
+                            break;
+                        case R.id.action_near_me:
+                            mapFragment.getView().setVisibility(View.GONE);
+                            templateNearMe.setVisibility(View.VISIBLE);
+                            templateSearch.setVisibility(View.GONE);
+                            break;
+                        case R.id.action_search:
+                            mapFragment.getView().setVisibility(View.GONE);
+                            templateNearMe.setVisibility(View.GONE);
+                            templateSearch.setVisibility(View.VISIBLE);
+                            break;
                     }
-                });
+                    return false;
+                }
+            });
     }
 
 
