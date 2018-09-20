@@ -1,8 +1,13 @@
 package dev.pinhub.pinhub;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,17 +21,58 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
+    private TextView templateNearMe;
+    private TextView templateSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.discover);
         mapFragment.getMapAsync(this);
 
+        templateNearMe = findViewById(R.id.near_me);
+        templateSearch = findViewById(R.id.search);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        HandleNavigationSwitching(bottomNavigationView);
         discountedListButtonListenerCreator();
+    }
+
+    private void HandleNavigationSwitching(BottomNavigationView bottomNavigationView) {
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    final int itemId = item.getItemId();
+                    if(itemId == R.id.action_discover || itemId == R.id.action_near_me ||
+                       itemId == R.id.action_search){
+
+                        item.setChecked(true);
+                        mapFragment.getView().setVisibility(View.GONE);
+                        templateSearch.setVisibility(View.GONE);
+                        templateNearMe.setVisibility(View.GONE);
+
+                        switch (itemId) {
+                            case R.id.action_discover:
+                                mapFragment.getView().setVisibility(View.VISIBLE);
+                                break;
+                            case R.id.action_near_me:
+                                templateNearMe.setVisibility(View.VISIBLE);
+                                break;
+                            case R.id.action_search:
+                                templateSearch.setVisibility(View.VISIBLE);
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
+
     }
 
 
@@ -44,9 +90,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(54.674886, 25.273520);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng vilnius = new LatLng(54.674886, 25.273520);
+        mMap.addMarker(new MarkerOptions().position(vilnius).title("Marker in Vilnius"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(vilnius));
     }
 
     private void discountedListButtonListenerCreator() {
