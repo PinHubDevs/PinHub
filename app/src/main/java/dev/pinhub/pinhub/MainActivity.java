@@ -44,22 +44,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.action_discover:
-                            mapFragment.getView().setVisibility(View.VISIBLE);
-                            templateNearMe.setVisibility(View.GONE);
-                            templateSearch.setVisibility(View.GONE);
-                            break;
-                        case R.id.action_near_me:
-                            mapFragment.getView().setVisibility(View.GONE);
-                            templateNearMe.setVisibility(View.VISIBLE);
-                            templateSearch.setVisibility(View.GONE);
-                            break;
-                        case R.id.action_search:
-                            mapFragment.getView().setVisibility(View.GONE);
-                            templateNearMe.setVisibility(View.GONE);
-                            templateSearch.setVisibility(View.VISIBLE);
-                            break;
+                    final int itemId = item.getItemId();
+                    if(itemId == R.id.action_discover || itemId == R.id.action_near_me ||
+                       itemId == R.id.action_search){
+
+                        item.setChecked(true);
+                        mapFragment.getView().setVisibility(View.GONE);
+                        templateSearch.setVisibility(View.GONE);
+                        templateNearMe.setVisibility(View.GONE);
+
+                        switch (itemId) {
+                            case R.id.action_discover:
+                                mapFragment.getView().setVisibility(View.VISIBLE);
+                                break;
+                            case R.id.action_near_me:
+                                templateNearMe.setVisibility(View.VISIBLE);
+                                break;
+                            case R.id.action_search:
+                                templateSearch.setVisibility(View.VISIBLE);
+                                break;
+                        }
                     }
                     return false;
                 }
