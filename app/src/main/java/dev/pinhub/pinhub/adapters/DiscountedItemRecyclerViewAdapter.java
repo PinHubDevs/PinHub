@@ -6,25 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import dev.pinhub.pinhub.fragments.DiscountedItemFragment.OnListFragmentInteractionListener;
-import dev.pinhub.pinhub.R;
-import dev.pinhub.pinhub.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+import dev.pinhub.pinhub.R;
+import dev.pinhub.pinhub.fragments.DiscountedItemFragment.OnListFragmentInteractionListener;
+import dev.pinhub.pinhub.models.DiscountedItem;
+
 public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<DiscountedItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<DiscountedItem> discountedItems;
+    private final OnListFragmentInteractionListener interactionListener;
 
-    public DiscountedItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public DiscountedItemRecyclerViewAdapter(List<DiscountedItem> items, OnListFragmentInteractionListener listener) {
+        discountedItems = items;
+        interactionListener = listener;
     }
 
     @Override
@@ -36,17 +31,17 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.item = discountedItems.get(position);
+        holder.name.setText(discountedItems.get(position).getName());
+        holder.description.setText(discountedItems.get(position).getDescription());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.discountedItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != interactionListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    interactionListener.onListFragmentInteraction(holder.item);
                 }
             }
         });
@@ -54,25 +49,27 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return discountedItems.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final View discountedItemView;
+        public final TextView name;
+        public final TextView description;
+        public DiscountedItem item;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            discountedItemView = view;
+            name = (TextView) view.findViewById(R.id.name);
+            description = (TextView) view.findViewById(R.id.description);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + description.getText() + "'";
         }
     }
 }
