@@ -63,8 +63,8 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
         public ViewHolder(View view) {
             super(view);
             discountedItemView = view;
-            name = (TextView) view.findViewById(R.id.name);
-            description = (TextView) view.findViewById(R.id.description);
+            name = (TextView) view.findViewById(R.id.discount_name);
+            description = (TextView) view.findViewById(R.id.discount_description);
         }
 
         @Override
