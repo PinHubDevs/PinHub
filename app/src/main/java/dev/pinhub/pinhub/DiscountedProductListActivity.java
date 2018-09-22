@@ -1,16 +1,21 @@
 package dev.pinhub.pinhub;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
 import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.models.DiscountedItemViewModel;
 
 public class DiscountedProductListActivity extends AppCompatActivity implements DiscountedItemFragment.OnListFragmentInteractionListener {
+
+    private DiscountedItemViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,19 +24,20 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
+        viewModel = ViewModelProviders.of(this).get(DiscountedItemViewModel.class);
+        addDummyData();
     }
 
     public void onListFragmentInteraction(DiscountedItem item){
+    }
 
+    private void addDummyData() {
+        List<DiscountedItem> items = new ArrayList<>();
+
+        for(int i = 0; i < 35; i++){
+            items.add(new DiscountedItem("Duona " + i, "Jore", "", BigDecimal.ONE, 10));
+        }
+
+        viewModel.setDiscountList(items);
     }
 }

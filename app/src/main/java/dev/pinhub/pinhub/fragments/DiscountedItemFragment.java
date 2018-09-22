@@ -1,8 +1,11 @@
 package dev.pinhub.pinhub.fragments;
 
-import android.app.Fragment;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,37 +13,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.adapters.DiscountedItemRecyclerViewAdapter;
 import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.models.DiscountedItemViewModel;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class DiscountedItemFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     private int columnCount = 1;
     private OnListFragmentInteractionListener interactionsListener;
+    private DiscountedItemViewModel viewModel;
+    private Observer<List<DiscountedItem>> discountedItemObserver;
     private List<DiscountedItem> discountedItems;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public DiscountedItemFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static DiscountedItemFragment newInstance(int columnCount) {
         DiscountedItemFragment fragment = new DiscountedItemFragment();
@@ -58,9 +51,11 @@ public class DiscountedItemFragment extends Fragment {
             columnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
 
-        // TODO: Remove after implementing fragment-activity data connection
-        discountedItems = new ArrayList<DiscountedItem>();
-        discountedItems.add(new DiscountedItem("Duona", "Jore", "", BigDecimal.ONE, 10));
+        discountedItems = new ArrayList<>();
+
+        createDiscountedItemsObserver();
+        viewModel = ViewModelProviders.of(getActivity()).get(DiscountedItemViewModel.class);
+        viewModel.getDiscountedItems().observe(getActivity(), discountedItemObserver);
     }
 
     @Override
@@ -112,5 +107,15 @@ public class DiscountedItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DiscountedItem item);
+    }
+
+    // TODO: Probably should move to ViewAdapter
+    private void createDiscountedItemsObserver() {
+        discountedItemObserver = new Observer<List<DiscountedItem>>() {
+            @Override
+            public void onChanged(@Nullable final List<DiscountedItem> items) {
+                discountedItems.addAll(items);
+            }
+        };
     }
 }
