@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class DiscountedProductListActivity extends AppCompatActivity {
+import dev.pinhub.pinhub.dummy.DummyContent;
+import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
+
+public class DiscountedProductListActivity extends AppCompatActivity implements DiscountedItemFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +27,11 @@ public class DiscountedProductListActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+    }
+
+    public void onListFragmentInteraction(DummyContent.DummyItem item){
+
     }
 }
