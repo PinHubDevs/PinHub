@@ -1,14 +1,10 @@
 package dev.pinhub.pinhub;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +16,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
+import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -99,7 +98,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // Add a marker and zoom into current location
-        locationUtil.getDeviceLocation(new LocationUtil.LocationCallback() {
+        locationUtil.getDeviceLocation(new LocationCallback() {
             @Override
             public void onComplete(Location location) {
                 LatLng currLoc = new LatLng(location.getLatitude(), location.getLongitude());
