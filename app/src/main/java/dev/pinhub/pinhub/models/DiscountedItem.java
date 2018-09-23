@@ -1,19 +1,18 @@
 package dev.pinhub.pinhub.models;
 
-import java.math.BigDecimal;
-
 public class DiscountedItem {
     private String name;
     private String description;
-    private String imageUrl; // How do we save images?
-    private BigDecimal priceBeforeDiscount;
-    private int discountPercentage;
+    // TODO: need to figure out the way to save images
+    private String imageUrl;
+    private Double discountedPrice;
+    private Integer discountPercentage;
 
-    public DiscountedItem(String name, String description, String imageUrl, BigDecimal priceBeforeDiscount, int discountPercentage) {
+    public DiscountedItem(String name, String description, String imageUrl, Double discountedPrice, int discountPercentage) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.priceBeforeDiscount = priceBeforeDiscount;
+        this.discountedPrice = discountedPrice;
         this.discountPercentage = discountPercentage;
     }
 
@@ -41,19 +40,19 @@ public class DiscountedItem {
         this.imageUrl = imageUrl;
     }
 
-    public BigDecimal getPriceBeforeDiscount() {
-        return priceBeforeDiscount;
+    public Double getDiscountedPrice() {
+        return discountedPrice;
     }
 
-    public void setPriceBeforeDiscount(BigDecimal priceBeforeDiscount) {
-        this.priceBeforeDiscount = priceBeforeDiscount;
+    public void setDiscountedPrice(Double discountedPrice) {
+        this.discountedPrice = discountedPrice;
     }
 
-    public int getDiscountPercentage() {
+    public Integer getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(int discountPercentage) {
+    public void setDiscountPercentage(Integer discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 }

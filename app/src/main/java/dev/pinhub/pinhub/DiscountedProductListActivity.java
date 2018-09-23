@@ -4,8 +4,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +29,16 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
     }
 
     public void onListFragmentInteraction(DiscountedItem item){
+        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
     }
 
+
+    // TODO: Remove after real data is used
     private void addDummyData() {
         List<DiscountedItem> items = new ArrayList<>();
 
         for(int i = 0; i < 35; i++){
-            items.add(new DiscountedItem("Duona " + i, "Jore", "", BigDecimal.ONE, 10));
+            items.add(new DiscountedItem("Duona " + i, "Jore", "", 3.99, 15));
         }
 
         viewModel.setDiscountList(items);

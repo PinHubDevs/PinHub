@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
         holder.item = discountedItems.get(position);
         holder.name.setText(discountedItems.get(position).getName());
         holder.description.setText(discountedItems.get(position).getDescription());
+        // TODO: need to set image in adapter
+        holder.price.setText(String.valueOf(discountedItems.get(position).getDiscountedPrice()) + "€");
+        holder.discount.setText(String.valueOf(discountedItems.get(position).getDiscountPercentage()) + "%");
 
         holder.discountedItemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +62,9 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
         public final View discountedItemView;
         public final TextView name;
         public final TextView description;
+        public final ImageView image;
+        public final TextView price;
+        public final TextView discount;
         public DiscountedItem item;
 
         public ViewHolder(View view) {
@@ -65,11 +72,10 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
             discountedItemView = view;
             name = (TextView) view.findViewById(R.id.discount_name);
             description = (TextView) view.findViewById(R.id.discount_description);
+            image = (ImageView) view.findViewById(R.id.discount_image);
+            price = (TextView) view.findViewById(R.id.discounted_price);
+            discount = (TextView) view.findViewById(R.id.discount_percentage);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + description.getText() + "'";
-        }
     }
 }
