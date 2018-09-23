@@ -1,5 +1,6 @@
 package dev.pinhub.pinhub;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentActivity;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +40,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         HandleNavigationSwitching(bottomNavigationView);
+        discountedListButtonListenerCreator();
     }
 
     private void HandleNavigationSwitching(BottomNavigationView bottomNavigationView) {
@@ -68,6 +72,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     return false;
                 }
             });
+
     }
 
 
@@ -88,5 +93,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng vilnius = new LatLng(54.674886, 25.273520);
         mMap.addMarker(new MarkerOptions().position(vilnius).title("Marker in Vilnius"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(vilnius));
+    }
+
+    private void discountedListButtonListenerCreator() {
+        Button discountedList = findViewById(R.id.DiscountedListActivityButton);
+
+        discountedList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToDiscountedListActivity();
+            }
+        });
+    }
+
+    private void switchToDiscountedListActivity() {
+        Intent discountedProductListActivity = new Intent(this, DiscountedProductListActivity.class);
+        startActivity(discountedProductListActivity);
     }
 }
