@@ -21,10 +21,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -33,17 +29,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView templateNearMe;
     private TextView templateSearch;
 
-    private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private final float DEFAULT_ZOOM = 14.0f;
-    private Boolean mLocationPermissionGranted = false;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private Location mLastKnownLocation;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
+    private LocationUtil locationUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        getLocationPermission();
+        locationUtil = new LocationUtil(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -105,42 +97,39 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        updateLocationUI();
-        getDeviceLocation();
+
+        // Add a marker and zoom into current location
+        locationUtil.getDeviceLocation(new LocationUtil.LocationCallback() {
+            @Override
+            public void onComplete(Location location) {
+                LatLng currLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(location.getLatitude(),
+                                location.getLongitude()), DEFAULT_ZOOM));
+
+                updateLocationUI();
+            }
+        });
+
 
         // Add a marker in Sydney and move the camera
         LatLng vilnius = new LatLng(54.674886, 25.273520);
         mMap.addMarker(new MarkerOptions().position(vilnius).title("Marker in Vilnius"));
     }
 
+    /**
+    Example how to get current location:
 
-    private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+     locationUtil.getDeviceLocation(new LocationUtil.LocationCallback() {
+        @Override
+        public void onComplete(Location location) {
+            // Write code that uses the location here
         }
-    }
+     });
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-                }
-            }
-        }
-        updateLocationUI();
-    }
+     */
 
 
     private void updateLocationUI() {
@@ -148,72 +137,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         try {
-            if (mLocationPermissionGranted) {
+            if (locationUtil.mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
+                locationUtil.mLastKnownLocation = null;
+                locationUtil.getLocationPermission();
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
     }
-
-    private void getDeviceLocation() {
-        try {
-            if (mLocationPermissionGranted) {
-                Task locationResult = mFusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            mLastKnownLocation = (Location) task.getResult();
-
-                            LatLng currLoc = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
-
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                        }
-                    }
-                });
-            } else {
-                getLocationPermission();
-            }
-        } catch(SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
-    // Sample function using location:
-    /*
-    private void getDeviceLocation() {
-        try {
-            if (mLocationPermissionGranted) {
-                Task locationResult = mFusedLocationClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            mLastKnownLocation = (Location) task.getResult();
-
-                            // --- ADD YOUR CODE HERE ---
-                            // Use mLastKnownLocation as the Location variable
-                        }
-                    }
-                });
-            } else {
-                getLocationPermission();
-            }
-        } catch(SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-     */
 }
 
 
