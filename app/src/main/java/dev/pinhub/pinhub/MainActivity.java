@@ -115,7 +115,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private boolean fragmentExists(String fragmentName) {
         Fragment fragmentToCheck = getSupportFragmentManager().findFragmentByTag(fragmentName);
-        return fragmentToCheck == null;
+        return fragmentToCheck != null;
     }
 
     private boolean fragmentIsVisible(String fragmentName) {
