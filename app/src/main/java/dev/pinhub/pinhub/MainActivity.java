@@ -22,6 +22,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
@@ -162,7 +165,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onListFragmentInteraction(DiscountedItem item){
-        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, item.getName() + ", hadouken.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void generateFakeData() {
+        List<DiscountedItem> discountedItems = new ArrayList<>();
+
+
     }
 
     /**
