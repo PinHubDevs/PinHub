@@ -1,16 +1,19 @@
 package dev.pinhub.pinhub;
 
-import android.location.Location;
-import android.support.annotation.NonNull;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,13 +24,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
+import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
+import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.models.MainActivityViewModel;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, DiscountedItemFragment.OnListFragmentInteractionListener{
+
+    private static final String MAP_FRAGMENT_NAME = "map_fragment";
+    private static final String NEAR_ME_FRAGMENT_NAME = "near_me_fragment";
+    private static final String SEARCH_FRAGMENT_NAME = "search_fragment";
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
-    private TextView templateNearMe;
-    private TextView templateSearch;
+    private MainActivityViewModel MainActivityViewModel;
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
@@ -39,52 +48,122 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.discover);
-        mapFragment.getMapAsync(this);
 
-        templateNearMe = findViewById(R.id.near_me);
-        templateSearch = findViewById(R.id.search);
+        MainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-
         HandleNavigationSwitching(bottomNavigationView);
+
+        if(savedInstanceState == null) {
+            createMapFragment();
+        }
+
         discountedListButtonListenerCreator();
     }
 
     private void HandleNavigationSwitching(BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    final int itemId = item.getItemId();
-                    if(itemId == R.id.action_discover || itemId == R.id.action_near_me ||
-                       itemId == R.id.action_search){
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        final int itemId = item.getItemId();
+                        if (itemId == R.id.action_discover || itemId == R.id.action_near_me ||
+                                itemId == R.id.action_search) {
 
-                        item.setChecked(true);
-                        mapFragment.getView().setVisibility(View.GONE);
-                        templateSearch.setVisibility(View.GONE);
-                        templateNearMe.setVisibility(View.GONE);
+                            item.setChecked(true);
 
-                        switch (itemId) {
-                            case R.id.action_discover:
-                                mapFragment.getView().setVisibility(View.VISIBLE);
-                                break;
-                            case R.id.action_near_me:
-                                templateNearMe.setVisibility(View.VISIBLE);
-                                break;
-                            case R.id.action_search:
-                                templateSearch.setVisibility(View.VISIBLE);
-                                break;
+                            switch (itemId) {
+                                case R.id.action_discover:
+                                    // Creates new MapFragment if one doesn't exist
+                                    // If map fragment exists, and is visible, nothing happens
+                                    // If exists, but not visible, then finds the MapFragment in backstack
+                                    // and changes to it
+                                    if (!fragmentExists(MAP_FRAGMENT_NAME)) {
+                                        createMapFragment();
+                                    } else if (!fragmentIsVisible(MAP_FRAGMENT_NAME)) {
+                                        Fragment mapFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(MAP_FRAGMENT_NAME);
+                                        changeFragment(mapFragmentFromBackstack, MAP_FRAGMENT_NAME);
+                                    }
+                                    break;
+
+                                    // Same logic as with MapFragment, but with NearMeFragment
+                                case R.id.action_near_me:
+                                    if (!fragmentExists(NEAR_ME_FRAGMENT_NAME)) {
+                                        createNearMeFragmentAndChangeToIt();
+                                    } else if (!fragmentIsVisible(NEAR_ME_FRAGMENT_NAME)) {
+                                        Fragment nearMeFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(NEAR_ME_FRAGMENT_NAME);
+                                        changeFragment(nearMeFragmentFromBackstack, NEAR_ME_FRAGMENT_NAME);
+                                    }
+                                    break;
+
+                                // Same logic as with MapFragment, but with SearchFragment
+                                case R.id.action_search:
+                                    if (!fragmentExists(SEARCH_FRAGMENT_NAME)) {
+                                        createSearchFragmentAndChangeToIt();
+                                    } else if (!fragmentIsVisible(SEARCH_FRAGMENT_NAME)) {
+                                        Fragment searchFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_NAME);
+                                        changeFragment(searchFragmentFromBackstack, SEARCH_FRAGMENT_NAME);
+                                    }
+                                    break;
+                            }
                         }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
 
     }
 
+    private boolean fragmentExists(String fragmentName) {
+        Fragment fragmentToCheck = getSupportFragmentManager().findFragmentByTag(fragmentName);
+        return fragmentToCheck != null;
+    }
+
+    private boolean fragmentIsVisible(String fragmentName) {
+        Fragment fragmentToCheck = getSupportFragmentManager().findFragmentByTag(fragmentName);
+        return fragmentToCheck.isVisible();
+    }
+
+    private void createMapFragment() {
+        if (findViewById(R.id.fragment_in_main_activity) != null) {
+
+            // Create a new Fragment to be placed in the activity layout
+            mapFragment = new SupportMapFragment();
+            mapFragment.getMapAsync(this);
+
+            // Add the fragment to the 'fragment_in_main_activity' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_in_main_activity, mapFragment, MAP_FRAGMENT_NAME).commit();
+        }
+    }
+
+    // Temporarily uses DiscountedItemFragment
+    private void createNearMeFragmentAndChangeToIt() {
+        Fragment discountedListFragment = new DiscountedItemFragment();
+        changeFragment(discountedListFragment, NEAR_ME_FRAGMENT_NAME);
+    }
+
+    // Temporarily uses DiscountedItemFragment
+    private void createSearchFragmentAndChangeToIt() {
+        Fragment discountedListFragment = new DiscountedItemFragment();
+        changeFragment(discountedListFragment, SEARCH_FRAGMENT_NAME);
+    }
+
+    private void changeFragment(Fragment fragmentToChange, String fragmentName) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.fragment_in_main_activity, fragmentToChange);
+        transaction.addToBackStack(fragmentName);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    public void onListFragmentInteraction(DiscountedItem item){
+        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * Manipulates the map once available.
