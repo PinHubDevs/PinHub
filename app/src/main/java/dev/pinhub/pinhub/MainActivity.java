@@ -58,8 +58,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if(savedInstanceState == null) {
             createMapFragment();
         }
-
-        discountedListButtonListenerCreator();
     }
 
     private void HandleNavigationSwitching(BottomNavigationView bottomNavigationView) {
@@ -175,46 +173,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-     @Override
-     public void onMapReady(GoogleMap googleMap) {
-         mMap = googleMap;
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
 
-         // Add a marker and zoom into current location
-         locationUtil.getDeviceLocation(new LocationCallback() {
-             @Override
-             public void onComplete(Location location) {
-                 LatLng currLoc = new LatLng(location.getLatitude(), location.getLongitude());
-                 mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
+        // Add a marker and zoom into current location
+        locationUtil.getDeviceLocation(new LocationCallback() {
+         @Override
+         public void onComplete(Location location) {
+             LatLng currLoc = new LatLng(location.getLatitude(), location.getLongitude());
+             mMap.addMarker(new MarkerOptions().position(currLoc).title("Current Location"));
 
-                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                         new LatLng(location.getLatitude(),
-                                 location.getLongitude()), DEFAULT_ZOOM));
+             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                     new LatLng(location.getLatitude(),
+                             location.getLongitude()), DEFAULT_ZOOM));
 
-                 updateLocationUI();
-             }
-         });
-
-         // Add a marker in Vilnius and move the camera
-         LatLng vilnius = new LatLng(54.674886, 25.273520);
-         mMap.addMarker(new MarkerOptions().position(vilnius).title("Marker in Vilnius"));
-     }
-
-    private void discountedListButtonListenerCreator() {
-        Button discountedList = findViewById(R.id.DiscountedListActivityButton);
-
-        discountedList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchToDiscountedListActivity();
-            }
+             updateLocationUI();
+         }
         });
     }
-
-    private void switchToDiscountedListActivity() {
-        Intent discountedProductListActivity = new Intent(this, DiscountedProductListActivity.class);
-        startActivity(discountedProductListActivity);
-    }
-
 
     /**
     Example how to get current location:
