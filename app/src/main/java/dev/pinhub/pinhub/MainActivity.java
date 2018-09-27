@@ -21,13 +21,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
+import dev.pinhub.pinhub.fragments.SearchViewFragment;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
+    private SearchViewFragment templateSearch;
     private TextView templateNearMe;
-    private TextView templateSearch;
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
@@ -45,7 +46,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         templateNearMe = findViewById(R.id.near_me);
-        templateSearch = findViewById(R.id.search);
+        templateSearch = (SearchViewFragment) getSupportFragmentManager().findFragmentById(R.id.search);
+        templateSearch.getView().setVisibility(View.GONE);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -64,7 +66,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                         item.setChecked(true);
                         mapFragment.getView().setVisibility(View.GONE);
-                        templateSearch.setVisibility(View.GONE);
+                        templateSearch.getView().setVisibility(View.GONE);
                         templateNearMe.setVisibility(View.GONE);
 
                         switch (itemId) {
@@ -75,7 +77,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 templateNearMe.setVisibility(View.VISIBLE);
                                 break;
                             case R.id.action_search:
-                                templateSearch.setVisibility(View.VISIBLE);
+                                templateSearch.getView().setVisibility(View.VISIBLE);
                                 break;
                         }
                     }
