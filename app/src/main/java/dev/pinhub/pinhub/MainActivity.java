@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
+import dev.pinhub.pinhub.fragments.SearchViewFragment;
 import dev.pinhub.pinhub.models.DiscountedItem;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
 
@@ -144,8 +145,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Temporarily uses DiscountedItemFragment
     private void createSearchFragmentAndChangeToIt() {
-        Fragment discountedListFragment = new DiscountedItemFragment();
-        changeFragment(discountedListFragment, SEARCH_FRAGMENT_NAME);
+        Fragment searchViewFragment = new SearchViewFragment();
+        changeFragment(searchViewFragment, SEARCH_FRAGMENT_NAME);
     }
 
     private void changeFragment(Fragment fragmentToChange, String fragmentName) {
