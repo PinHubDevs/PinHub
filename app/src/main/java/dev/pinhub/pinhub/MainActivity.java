@@ -92,6 +92,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 case R.id.action_near_me:
                                     if (!fragmentExists(NEAR_ME_FRAGMENT_NAME)) {
                                         createNearMeFragmentAndChangeToIt();
+                                        generateFakeData();
                                     } else if (!fragmentIsVisible(NEAR_ME_FRAGMENT_NAME)) {
                                         Fragment nearMeFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(NEAR_ME_FRAGMENT_NAME);
                                         changeFragment(nearMeFragmentFromBackstack, NEAR_ME_FRAGMENT_NAME);
@@ -170,7 +171,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void generateFakeData() {
         List<DiscountedItem> discountedItems = new ArrayList<>();
 
+        for(int i = 0; i < 35; i++){
+            discountedItems.add(new DiscountedItem("Duona " + i, "Jore", R.drawable.iki_logo, 3.99, 15));
+        }
 
+        MainActivityViewModel.setDiscountList(discountedItems);
     }
 
     /**
