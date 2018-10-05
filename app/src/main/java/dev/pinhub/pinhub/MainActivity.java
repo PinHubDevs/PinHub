@@ -19,6 +19,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
@@ -165,6 +168,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onShopListFragmentInteraction(ShopCard item){
 
+    }
+
+    public void populateFakeShopData() {
+        List<ShopCard> fakeShops = new ArrayList<>();
+
+//        ShopCard ikiShop = new ShopCard("Iki", "Baltupiu g. 69", );
     }
 
     /**

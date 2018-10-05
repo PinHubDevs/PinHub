@@ -23,40 +23,28 @@ import dev.pinhub.pinhub.models.ShopCard;
 
 public class ShopCardListFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private static final int COLUMN_COUNT = 1;
+
     private OnListFragmentInteractionListener shopCardInteractionListener;
-    private Observer<List<ShopCard>> shopCardListObserver;
     private MainActivityViewModel mainActivityViewModel;
+    private Observer<List<ShopCard>> shopCardListObserver;
     private List<ShopCard> shops;
 
     public ShopCardListFragment() {
-    }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ShopCardListFragment newInstance(int columnCount) {
-        ShopCardListFragment fragment = new ShopCardListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-
         shops = new ArrayList<>();
 
         createDiscountedItemsObserver();
+
+        // Get the MainActivityViewModel from MainActivity
         mainActivityViewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
+        // Start observing (subscribing) shops list observable data type
         mainActivityViewModel.getShops().observe(getActivity(), shopCardListObserver);
     }
 
@@ -81,10 +69,10 @@ public class ShopCardListFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            if (COLUMN_COUNT <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                recyclerView.setLayoutManager(new GridLayoutManager(context, COLUMN_COUNT));
             }
             recyclerView.setAdapter(new ShopCardListRecyclerViewAdapter(shops, shopCardInteractionListener));
         }
