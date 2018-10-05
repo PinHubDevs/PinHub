@@ -41,7 +41,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
-    private MainActivityViewModel MainActivityViewModel;
+    private MainActivityViewModel mainActivityViewModel;
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         HandleNavigationSwitching(bottomNavigationView);
@@ -168,23 +168,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void generateFakeData() {
-        List<DiscountedItem> discountedItems = new ArrayList<>();
+        List<ShopCard> fakeShops = new ArrayList<>();
 
-        for(int i = 0; i < 35; i++){
-            discountedItems.add(new DiscountedItem("Duona " + i, "Jore", R.drawable.iki_logo, 3.99, 15));
-        }
+        ShopCard ikiShop = new ShopCard("Iki", "Baltupiu g. 69", R.drawable.iki_logo, 3);
+        ShopCard maximaShop = new ShopCard("Maxima", "Kalvariju g. 6", R.drawable.iki_logo, 15);
 
-        MainActivityViewModel.setDiscountList(discountedItems);
+        fakeShops.add(ikiShop);
+        fakeShops.add(maximaShop);
+
+        mainActivityViewModel.setShopCardList(fakeShops);
     }
 
     public void onShopListFragmentInteraction(ShopCard item){
 
-    }
-
-    public void populateFakeShopData() {
-        List<ShopCard> fakeShops = new ArrayList<>();
-
-//        ShopCard ikiShop = new ShopCard("Iki", "Baltupiu g. 69", );
     }
 
     /**

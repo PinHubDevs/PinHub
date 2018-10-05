@@ -11,6 +11,10 @@ public class MainActivityViewModel extends ViewModel {
     // Observable type object that holds the shops
     private MutableLiveData<List<ShopCard>> shops;
 
+    public MainActivityViewModel() {
+        shops = new MutableLiveData<>();
+    }
+
     public LiveData<List<ShopCard>> getShops() {
         if(shops == null) {
             shops = new MutableLiveData<>();

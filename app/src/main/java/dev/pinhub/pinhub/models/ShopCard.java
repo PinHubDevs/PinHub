@@ -4,13 +4,13 @@ public class ShopCard {
 
     private String name;
     private String address;
-    private String imgUrl;
+    private Integer imageResourceId;
     private double distance;
 
-    public ShopCard(String name, String address, String imgUrl, double distance) {
+    public ShopCard(String name, String address, Integer imageResourceId, double distance) {
         this.name = name;
         this.address = address;
-        this.imgUrl = imgUrl;
+        this.imageResourceId = imageResourceId;
         this.distance = distance;
     }
 
@@ -30,12 +30,12 @@ public class ShopCard {
         this.address = address;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public Integer getImageResourceId() {
+        return imageResourceId;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImageResourceId(Integer imageResourceId) {
+        this.imageResourceId = imageResourceId;
     }
 
     public double getDistance() {
