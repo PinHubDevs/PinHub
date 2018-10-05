@@ -1,7 +1,10 @@
 package dev.pinhub.pinhub.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,29 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.adapters.ShopCardListRecyclerViewAdapter;
-import dev.pinhub.pinhub.dummy.DummyContent;
-import dev.pinhub.pinhub.dummy.DummyContent.DummyItem;
+import dev.pinhub.pinhub.models.MainActivityViewModel;
+import dev.pinhub.pinhub.models.ShopCard;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class ShopCardListFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener shopCardInteractionListener;
+    private Observer<List<ShopCard>> shopCardListObserver;
+    private MainActivityViewModel mainActivityViewModel;
+    private List<ShopCard> shops;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ShopCardListFragment() {
     }
 
@@ -53,6 +52,24 @@ public class ShopCardListFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        shops = new ArrayList<>();
+
+        createDiscountedItemsObserver();
+        mainActivityViewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
+        mainActivityViewModel.getShops().observe(getActivity(), shopCardListObserver);
+    }
+
+    // Create the observer object and subscribe to MainActivityViewModel's shops observable
+    private void createDiscountedItemsObserver() {
+        shopCardListObserver = new Observer<List<ShopCard>>() {
+
+            // When a change in data is received, add all new ShopCards to the RecyclerView
+            @Override
+            public void onChanged(@Nullable final List<ShopCard> items) {
+                shops.addAll(items);
+            }
+        };
     }
 
     @Override
@@ -69,7 +86,7 @@ public class ShopCardListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new ShopCardListRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new ShopCardListRecyclerViewAdapter(shops, shopCardInteractionListener));
         }
         return view;
     }
@@ -79,7 +96,7 @@ public class ShopCardListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            shopCardInteractionListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -89,21 +106,10 @@ public class ShopCardListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        shopCardInteractionListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onShopListFragmentInteraction(ShopCard item);
     }
 }

@@ -45,7 +45,7 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
                 if (null != interactionListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    interactionListener.onListFragmentInteraction(holder.item);
+                    interactionListener.onDiscountedItemsFragmentInteraction(holder.item);
                 }
             }
         });

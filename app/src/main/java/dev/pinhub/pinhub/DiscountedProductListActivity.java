@@ -28,7 +28,7 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
         addDummyData();
     }
 
-    public void onListFragmentInteraction(DiscountedItem item){
+    public void onDiscountedItemsFragmentInteraction(DiscountedItem item){
         Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
     }
 

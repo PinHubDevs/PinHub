@@ -6,25 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import dev.pinhub.pinhub.R;
-import dev.pinhub.pinhub.fragments.ShopCardListFragment.OnListFragmentInteractionListener;
-import dev.pinhub.pinhub.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+import dev.pinhub.pinhub.R;
+import dev.pinhub.pinhub.fragments.ShopCardListFragment.OnListFragmentInteractionListener;
+import dev.pinhub.pinhub.models.ShopCard;
+
+
 public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCardListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<ShopCard> shopCards;
+    private final OnListFragmentInteractionListener listFragmentInteractionListener;
 
-    public ShopCardListRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public ShopCardListRecyclerViewAdapter(List<ShopCard> items, OnListFragmentInteractionListener listener) {
+        shopCards = items;
+        listFragmentInteractionListener = listener;
     }
 
     @Override
@@ -36,17 +32,17 @@ public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCa
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = shopCards.get(position);
+        holder.mIdView.setText(shopCards.get(position).getName());
+        holder.mContentView.setText(shopCards.get(position).getAddress());
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.shopView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
+                if (null != listFragmentInteractionListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    listFragmentInteractionListener.onShopListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -54,25 +50,20 @@ public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCa
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return shopCards.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+        public final View shopView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public ShopCard mItem;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            shopView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
 }

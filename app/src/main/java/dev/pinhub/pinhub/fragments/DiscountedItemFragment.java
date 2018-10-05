@@ -102,7 +102,7 @@ public class DiscountedItemFragment extends Fragment {
      * activity.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DiscountedItem item);
+        void onDiscountedItemsFragmentInteraction(DiscountedItem item);
     }
 
     // TODO: Probably should move to ViewAdapter
