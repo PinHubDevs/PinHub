@@ -19,7 +19,7 @@ import java.util.List;
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.adapters.ShopCardListRecyclerViewAdapter;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
-import dev.pinhub.pinhub.storage.client.models.ShopItem;
+import dev.pinhub.pinhub.storage.client.models.StoreItem;
 
 public class ShopCardListFragment extends Fragment {
 
@@ -27,8 +27,8 @@ public class ShopCardListFragment extends Fragment {
 
     private OnListFragmentInteractionListener shopCardInteractionListener;
     private MainActivityViewModel mainActivityViewModel;
-    private Observer<List<ShopItem>> shopCardListObserver;
-    private List<ShopItem> shops;
+    private Observer<List<StoreItem>> shopCardListObserver;
+    private List<StoreItem> shops;
 
     public ShopCardListFragment() {
 
@@ -50,11 +50,11 @@ public class ShopCardListFragment extends Fragment {
 
     // Create the observer object and subscribe to MainActivityViewModel's shops observable
     private void createDiscountedItemsObserver() {
-        shopCardListObserver = new Observer<List<ShopItem>>() {
+        shopCardListObserver = new Observer<List<StoreItem>>() {
 
             // When a change in data is received, add all new ShopCards to the RecyclerView
             @Override
-            public void onChanged(@Nullable final List<ShopItem> items) {
+            public void onChanged(@Nullable final List<StoreItem> items) {
                 shops.addAll(items);
             }
         };
@@ -98,6 +98,6 @@ public class ShopCardListFragment extends Fragment {
     }
 
     public interface OnListFragmentInteractionListener {
-        void onShopListFragmentInteraction(ShopItem item);
+        void onShopListFragmentInteraction(StoreItem item);
     }
 }

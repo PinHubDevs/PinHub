@@ -29,7 +29,7 @@ import dev.pinhub.pinhub.fragments.SearchViewFragment;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment;
 import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
-import dev.pinhub.pinhub.storage.client.models.ShopItem;
+import dev.pinhub.pinhub.storage.client.models.StoreItem;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
         DiscountedItemFragment.OnListFragmentInteractionListener,
@@ -168,10 +168,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void generateFakeData() {
-        List<ShopItem> fakeShops = new ArrayList<>();
+        List<StoreItem> fakeShops = new ArrayList<>();
 
-        ShopItem ikiShop = new ShopItem("Iki", "Baltupiu g. 69", R.drawable.iki_logo, 3);
-        ShopItem maximaShop = new ShopItem("Maxima", "Kalvariju g. 6", R.drawable.iki_logo, 15);
+        StoreItem ikiShop = new StoreItem("Iki", "Baltupiu g. 69", R.drawable.iki_logo, 3);
+        StoreItem maximaShop = new StoreItem("Maxima", "Kalvariju g. 6", R.drawable.iki_logo, 15);
 
         fakeShops.add(ikiShop);
         fakeShops.add(maximaShop);
@@ -179,7 +179,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mainActivityViewModel.setShopCardList(fakeShops);
     }
 
-    public void onShopListFragmentInteraction(ShopItem item){
+    public void onShopListFragmentInteraction(StoreItem item){
 
     }
 

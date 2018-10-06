@@ -1,6 +1,6 @@
 package dev.pinhub.pinhub.storage.client.models;
 
-public class ShopItem {
+public class StoreItem {
     private int id;
     private String name;
     private String address;
@@ -11,7 +11,7 @@ public class ShopItem {
     private String type;
     private String discountImgUrl;
 
-    public ShopItem(String name, String address, Integer imageResourceId, double distance) {
+    public StoreItem(String name, String address, Integer imageResourceId, double distance) {
         this.name = name;
         this.address = address;
         this.imageResourceId = imageResourceId;
