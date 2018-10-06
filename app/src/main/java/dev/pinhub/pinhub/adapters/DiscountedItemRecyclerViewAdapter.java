@@ -35,7 +35,7 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
         holder.item = discountedItems.get(position);
         holder.name.setText(discountedItems.get(position).getName());
         holder.description.setText(discountedItems.get(position).getDescription());
-        // TODO: need to set image in adapter
+        holder.image.setImageResource(discountedItems.get(position).getImageResourceId());
         holder.price.setText(String.valueOf(discountedItems.get(position).getDiscountedPrice()) + "€");
         holder.discount.setText(String.valueOf(discountedItems.get(position).getDiscountPercentage()) + "%");
 
@@ -45,7 +45,7 @@ public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<Disc
                 if (null != interactionListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    interactionListener.onListFragmentInteraction(holder.item);
+                    interactionListener.onDiscountedItemsFragmentInteraction(holder.item);
                 }
             }
         });

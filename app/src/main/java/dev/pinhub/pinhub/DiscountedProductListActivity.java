@@ -28,7 +28,7 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
         addDummyData();
     }
 
-    public void onListFragmentInteraction(DiscountedItem item){
+    public void onDiscountedItemsFragmentInteraction(DiscountedItem item){
         Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -38,7 +38,7 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
         List<DiscountedItem> items = new ArrayList<>();
 
         for(int i = 0; i < 35; i++){
-            items.add(new DiscountedItem("Duona " + i, "Jore", "", 3.99, 15));
+            items.add(new DiscountedItem("Duona " + i, "Jore", R.drawable.iki_logo, 3.99, 15));
         }
 
         viewModel.setDiscountList(items);
