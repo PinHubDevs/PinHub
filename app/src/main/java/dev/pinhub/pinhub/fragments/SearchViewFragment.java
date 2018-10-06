@@ -15,22 +15,18 @@ import java.util.List;
 
 import dev.pinhub.pinhub.DiscountedProductListActivity;
 import dev.pinhub.pinhub.R;
-import dev.pinhub.pinhub.storage.client.DiscountDbCallback;
-import dev.pinhub.pinhub.storage.client.DiscountDbHelper;
-import dev.pinhub.pinhub.storage.client.DiscountDbHelperDummy;
-import dev.pinhub.pinhub.storage.client.StoreDbCallback;
-import dev.pinhub.pinhub.storage.client.StoreDbHelper;
-import dev.pinhub.pinhub.storage.client.StoreDbHelperDummy;
-import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
+import dev.pinhub.pinhub.storage.client.ShopClientCallback;
+import dev.pinhub.pinhub.storage.client.ShopClientHelper;
+import dev.pinhub.pinhub.storage.client.ShopClientHelperDummy;
 import dev.pinhub.pinhub.storage.client.models.StoreItem;
 
 public class SearchViewFragment extends Fragment {
     private SearchView search;
-    private StoreDbHelper storeDbHelper;
+    private ShopClientHelper shopClientHelper;
 
     public SearchViewFragment()
     {
-        this.storeDbHelper = new StoreDbHelperDummy();
+        this.shopClientHelper = new ShopClientHelperDummy();
     }
 
     public static SearchViewFragment newInstance() {
@@ -59,7 +55,7 @@ public class SearchViewFragment extends Fragment {
                 }
 
                 final Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
-                storeDbHelper.getStoresByType(s, new StoreDbCallback() {
+                shopClientHelper.getStoresByType(s, new ShopClientCallback() {
                     @Override
                     public void onCompleteList(List<StoreItem> storeItem) {
                         discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());
@@ -84,7 +80,7 @@ public class SearchViewFragment extends Fragment {
                 public void onClick(View v) {
                     final Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
 
-                    storeDbHelper.getStoresByType(text, new StoreDbCallback() {
+                    shopClientHelper.getStoresByType(text, new ShopClientCallback() {
                         @Override
                         public void onCompleteList(List<StoreItem> storeItem) {
                             discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());

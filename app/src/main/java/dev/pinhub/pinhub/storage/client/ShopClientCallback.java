@@ -5,6 +5,6 @@ import java.util.List;
 
 import dev.pinhub.pinhub.storage.client.models.StoreItem;
 
-public interface StoreDbCallback {
-    void onCompleteList(List<StoreItem> storeItem);
+public interface ShopClientCallback {
+    void onCompleteList(List<StoreItem> storeItems);
 }

@@ -6,9 +6,9 @@ import java.util.List;
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 
-public class DiscountDbHelperDummy implements DiscountDbHelper {
+public class DiscountClientHelperDummy implements DiscountClientHelper {
     @Override
-    public void getDiscountByStoreId(int storeId, DiscountDbCallback discountItemCallback) {
+    public void getDiscountByStoreId(int storeId, DiscountClientCallback discountItemCallback) {
         List<DiscountedItem> items = new ArrayList<>();
 
         for(int i = 0; i < 35; i++){
@@ -18,7 +18,7 @@ public class DiscountDbHelperDummy implements DiscountDbHelper {
     }
 
     @Override
-    public void getDiscountCountByStoreId(int storeId, DiscountDbCallback discountItemCallback) {
+    public void getDiscountCountByStoreId(int storeId, DiscountClientCallback discountItemCallback) {
         discountItemCallback.onCompleteCount(5);
     }
 }
