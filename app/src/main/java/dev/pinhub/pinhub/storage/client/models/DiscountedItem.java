@@ -1,4 +1,4 @@
-package dev.pinhub.pinhub.models;
+package dev.pinhub.pinhub.storage.client.models;
 
 public class DiscountedItem {
     private String name;

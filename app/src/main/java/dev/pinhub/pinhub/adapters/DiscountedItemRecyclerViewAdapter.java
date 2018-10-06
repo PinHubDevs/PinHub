@@ -11,7 +11,7 @@ import java.util.List;
 
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment.OnListFragmentInteractionListener;
-import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 
 public class DiscountedItemRecyclerViewAdapter extends RecyclerView.Adapter<DiscountedItemRecyclerViewAdapter.ViewHolder> {
 

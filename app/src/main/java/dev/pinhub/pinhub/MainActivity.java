@@ -27,9 +27,9 @@ import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
 import dev.pinhub.pinhub.fragments.SearchViewFragment;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment;
-import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
-import dev.pinhub.pinhub.models.ShopCard;
+import dev.pinhub.pinhub.storage.client.models.ShopCard;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
         DiscountedItemFragment.OnListFragmentInteractionListener,

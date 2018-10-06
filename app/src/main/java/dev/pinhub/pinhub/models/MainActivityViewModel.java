@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
 
+import dev.pinhub.pinhub.storage.client.models.ShopCard;
+
 public class MainActivityViewModel extends ViewModel {
 
     // Observable type object that holds the shops

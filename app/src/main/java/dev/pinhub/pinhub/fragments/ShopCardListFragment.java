@@ -19,7 +19,7 @@ import java.util.List;
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.adapters.ShopCardListRecyclerViewAdapter;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
-import dev.pinhub.pinhub.models.ShopCard;
+import dev.pinhub.pinhub.storage.client.models.ShopCard;
 
 public class ShopCardListFragment extends Fragment {
 

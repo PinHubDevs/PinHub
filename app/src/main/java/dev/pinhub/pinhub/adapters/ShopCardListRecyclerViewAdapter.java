@@ -10,7 +10,7 @@ import java.util.List;
 
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment.OnListFragmentInteractionListener;
-import dev.pinhub.pinhub.models.ShopCard;
+import dev.pinhub.pinhub.storage.client.models.ShopCard;
 
 
 public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCardListRecyclerViewAdapter.ViewHolder> {
