@@ -7,15 +7,30 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
+import dev.pinhub.pinhub.storage.client.DiscountDbCallback;
+import dev.pinhub.pinhub.storage.client.DiscountDbHelper;
+import dev.pinhub.pinhub.storage.client.DiscountDbHelperDummy;
 import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 import dev.pinhub.pinhub.models.DiscountedItemViewModel;
 
 public class DiscountedProductListActivity extends AppCompatActivity implements DiscountedItemFragment.OnListFragmentInteractionListener {
 
     private DiscountedItemViewModel viewModel;
+    private DiscountDbHelper discountDbHelper;
+
+    public DiscountedProductListActivity()
+    {
+        this.discountDbHelper = new DiscountDbHelperDummy();
+    }
+
+    public DiscountedProductListActivity(DiscountDbHelper discountDbHelper)
+    {
+        this.discountDbHelper = discountDbHelper;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +40,9 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
         setSupportActionBar(toolbar);
 
         viewModel = ViewModelProviders.of(this).get(DiscountedItemViewModel.class);
-        addDummyData();
+
+        Bundle bundle = getIntent().getExtras();
+        addDataById(bundle.getInt("storeId"));
     }
 
     public void onDiscountedItemsFragmentInteraction(DiscountedItem item){
@@ -34,13 +51,15 @@ public class DiscountedProductListActivity extends AppCompatActivity implements 
 
 
     // TODO: Remove after real data is used
-    private void addDummyData() {
-        List<DiscountedItem> items = new ArrayList<>();
+    private void addDataById(int storeId) {
+        discountDbHelper.getDiscountByStoreId(storeId, new DiscountDbCallback() {
+            @Override
+            public void onCompleteList(List<DiscountedItem> discountedItems) {
+                viewModel.setDiscountList(discountedItems);
+            }
 
-        for(int i = 0; i < 35; i++){
-            items.add(new DiscountedItem("Duona " + i, "Jore", R.drawable.iki_logo, 3.99, 15));
-        }
-
-        viewModel.setDiscountList(items);
+            @Override
+            public void onCompleteCount(int discountedItemCount) { }
+        });
     }
 }

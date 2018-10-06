@@ -11,13 +11,26 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.SearchView;
 
+import java.util.List;
+
 import dev.pinhub.pinhub.DiscountedProductListActivity;
 import dev.pinhub.pinhub.R;
+import dev.pinhub.pinhub.storage.client.DiscountDbCallback;
+import dev.pinhub.pinhub.storage.client.DiscountDbHelper;
+import dev.pinhub.pinhub.storage.client.DiscountDbHelperDummy;
+import dev.pinhub.pinhub.storage.client.StoreDbCallback;
+import dev.pinhub.pinhub.storage.client.StoreDbHelper;
+import dev.pinhub.pinhub.storage.client.StoreDbHelperDummy;
+import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
+import dev.pinhub.pinhub.storage.client.models.StoreItem;
 
 public class SearchViewFragment extends Fragment {
     private SearchView search;
+    private StoreDbHelper storeDbHelper;
 
-    public SearchViewFragment() {
+    public SearchViewFragment()
+    {
+        this.storeDbHelper = new StoreDbHelperDummy();
     }
 
     public static SearchViewFragment newInstance() {
@@ -41,13 +54,18 @@ public class SearchViewFragment extends Fragment {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                if(!s.contains("Bread"))
-                {
+                if(!s.contains("Bread")){
                     return false;
                 }
 
-                Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
-                startActivity(discountedProductListActivity);
+                final Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
+                storeDbHelper.getStoresByType(s, new StoreDbCallback() {
+                    @Override
+                    public void onCompleteList(List<StoreItem> storeItem) {
+                        discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());
+                        startActivity(discountedProductListActivity);
+                    }
+                });
                 return true;
             }
 
@@ -64,8 +82,15 @@ public class SearchViewFragment extends Fragment {
             bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
-                    startActivity(discountedProductListActivity);
+                    final Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
+
+                    storeDbHelper.getStoresByType(text, new StoreDbCallback() {
+                        @Override
+                        public void onCompleteList(List<StoreItem> storeItem) {
+                            discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());
+                            startActivity(discountedProductListActivity);
+                        }
+                    });
                 }
             });
             gridLayout.addView(bt);
