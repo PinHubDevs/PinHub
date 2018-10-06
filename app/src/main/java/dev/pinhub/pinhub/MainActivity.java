@@ -1,7 +1,6 @@
 package dev.pinhub.pinhub;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,14 +19,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
 import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
 import dev.pinhub.pinhub.fragments.SearchViewFragment;
+import dev.pinhub.pinhub.fragments.ShopCardListFragment;
 import dev.pinhub.pinhub.models.DiscountedItem;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
+import dev.pinhub.pinhub.models.ShopCard;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, DiscountedItemFragment.OnListFragmentInteractionListener{
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback,
+        DiscountedItemFragment.OnListFragmentInteractionListener,
+        ShopCardListFragment.OnListFragmentInteractionListener{
 
     private static final String MAP_FRAGMENT_NAME = "map_fragment";
     private static final String NEAR_ME_FRAGMENT_NAME = "near_me_fragment";
@@ -37,7 +41,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
-    private MainActivityViewModel MainActivityViewModel;
+    private MainActivityViewModel mainActivityViewModel;
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
@@ -50,7 +54,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         HandleNavigationSwitching(bottomNavigationView);
@@ -89,6 +93,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 case R.id.action_near_me:
                                     if (!fragmentExists(NEAR_ME_FRAGMENT_NAME)) {
                                         createNearMeFragmentAndChangeToIt();
+                                        generateFakeData();
                                     } else if (!fragmentIsVisible(NEAR_ME_FRAGMENT_NAME)) {
                                         Fragment nearMeFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(NEAR_ME_FRAGMENT_NAME);
                                         changeFragment(nearMeFragmentFromBackstack, NEAR_ME_FRAGMENT_NAME);
@@ -135,13 +140,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    // Temporarily uses DiscountedItemFragment
     private void createNearMeFragmentAndChangeToIt() {
-        Fragment discountedListFragment = new DiscountedItemFragment();
-        changeFragment(discountedListFragment, NEAR_ME_FRAGMENT_NAME);
+        Fragment shopCardListFragment = new ShopCardListFragment();
+        changeFragment(shopCardListFragment, NEAR_ME_FRAGMENT_NAME);
     }
 
-    // Temporarily uses DiscountedItemFragment
     private void createSearchFragmentAndChangeToIt() {
         Fragment searchViewFragment = new SearchViewFragment();
         changeFragment(searchViewFragment, SEARCH_FRAGMENT_NAME);
@@ -160,8 +163,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         transaction.commit();
     }
 
-    public void onListFragmentInteraction(DiscountedItem item){
-        Toast.makeText(this, item.getName(), Toast.LENGTH_SHORT).show();
+    public void onDiscountedItemsFragmentInteraction(DiscountedItem item){
+        Toast.makeText(this, item.getName() + ", hadouken.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void generateFakeData() {
+        List<ShopCard> fakeShops = new ArrayList<>();
+
+        ShopCard ikiShop = new ShopCard("Iki", "Baltupiu g. 69", R.drawable.iki_logo, 3);
+        ShopCard maximaShop = new ShopCard("Maxima", "Kalvariju g. 6", R.drawable.iki_logo, 15);
+
+        fakeShops.add(ikiShop);
+        fakeShops.add(maximaShop);
+
+        mainActivityViewModel.setShopCardList(fakeShops);
+    }
+
+    public void onShopListFragmentInteraction(ShopCard item){
+
     }
 
     /**
