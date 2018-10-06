@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
 
+import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
+
 public class DiscountedItemViewModel extends ViewModel {
     private MutableLiveData<List<DiscountedItem>> discountedItems;
 

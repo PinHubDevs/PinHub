@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
-import dev.pinhub.pinhub.models.DiscountedItem;
+import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 import dev.pinhub.pinhub.models.DiscountedItemViewModel;
 
 public class DiscountedProductListActivity extends AppCompatActivity implements DiscountedItemFragment.OnListFragmentInteractionListener {
