@@ -6,18 +6,18 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.List;
 
-import dev.pinhub.pinhub.storage.client.models.ShopCard;
+import dev.pinhub.pinhub.storage.client.models.ShopItem;
 
 public class MainActivityViewModel extends ViewModel {
 
     // Observable type object that holds the shops
-    private MutableLiveData<List<ShopCard>> shops;
+    private MutableLiveData<List<ShopItem>> shops;
 
     public MainActivityViewModel() {
         shops = new MutableLiveData<>();
     }
 
-    public LiveData<List<ShopCard>> getShops() {
+    public LiveData<List<ShopItem>> getShops() {
         if(shops == null) {
             shops = new MutableLiveData<>();
         }
@@ -25,7 +25,7 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     // Sets the value of the observable and propagates the changes to all subscribers
-    public void setShopCardList(List<ShopCard> shopList) {
+    public void setShopCardList(List<ShopItem> shopList) {
         shops.setValue(shopList);
     }
 

@@ -10,16 +10,16 @@ import java.util.List;
 
 import dev.pinhub.pinhub.R;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment.OnListFragmentInteractionListener;
-import dev.pinhub.pinhub.storage.client.models.ShopCard;
+import dev.pinhub.pinhub.storage.client.models.ShopItem;
 
 
 public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCardListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ShopCard> shopCards;
+    private final List<ShopItem> shopItems;
     private final OnListFragmentInteractionListener listFragmentInteractionListener;
 
-    public ShopCardListRecyclerViewAdapter(List<ShopCard> items, OnListFragmentInteractionListener listener) {
-        shopCards = items;
+    public ShopCardListRecyclerViewAdapter(List<ShopItem> items, OnListFragmentInteractionListener listener) {
+        shopItems = items;
         listFragmentInteractionListener = listener;
     }
 
@@ -32,9 +32,9 @@ public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCa
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = shopCards.get(position);
-        holder.mIdView.setText(shopCards.get(position).getName());
-        holder.mContentView.setText(shopCards.get(position).getAddress());
+        holder.mItem = shopItems.get(position);
+        holder.mIdView.setText(shopItems.get(position).getName());
+        holder.mContentView.setText(shopItems.get(position).getAddress());
 
         holder.shopView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,14 +50,14 @@ public class ShopCardListRecyclerViewAdapter extends RecyclerView.Adapter<ShopCa
 
     @Override
     public int getItemCount() {
-        return shopCards.size();
+        return shopItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View shopView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public ShopCard mItem;
+        public ShopItem mItem;
 
         public ViewHolder(View view) {
             super(view);
