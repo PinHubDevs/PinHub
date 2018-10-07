@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import dev.pinhub.pinhub.R;

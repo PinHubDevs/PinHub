@@ -1,6 +1,6 @@
-package dev.pinhub.pinhub.LocationUtilities;
+package dev.pinhub.pinhub.location;
 
-public interface LocationBase {
+public interface LocationGetter {
     int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     void getLocationPermission();

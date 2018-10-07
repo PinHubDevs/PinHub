@@ -11,6 +11,10 @@ public class StoreItem {
     private String type;
     private String discountImgUrl;
 
+    public StoreItem() {
+
+    }
+
     public StoreItem(String name, String address, Integer imageResourceId, double distance) {
         this.name = name;
         this.address = address;

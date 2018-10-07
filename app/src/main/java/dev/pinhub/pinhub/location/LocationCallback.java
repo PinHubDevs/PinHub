@@ -1,4 +1,4 @@
-package dev.pinhub.pinhub.LocationUtilities;
+package dev.pinhub.pinhub.location;
 
 import android.location.Location;
 

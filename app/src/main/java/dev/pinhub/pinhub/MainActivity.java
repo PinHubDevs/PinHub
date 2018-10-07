@@ -1,6 +1,7 @@
 package dev.pinhub.pinhub;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,14 +20,18 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import dev.pinhub.pinhub.LocationUtilities.LocationCallback;
-import dev.pinhub.pinhub.LocationUtilities.LocationUtil;
+import dev.pinhub.pinhub.location.LocationCallback;
+import dev.pinhub.pinhub.location.LocationGetterUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
 import dev.pinhub.pinhub.fragments.SearchViewFragment;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment;
+import dev.pinhub.pinhub.storage.client.DiscountClientHelper;
+import dev.pinhub.pinhub.storage.client.DiscountClientHelperDummy;
+import dev.pinhub.pinhub.storage.client.ShopClientCallback;
+import dev.pinhub.pinhub.storage.client.ShopClientHelper;
+import dev.pinhub.pinhub.storage.client.ShopClientHelperDummy;
 import dev.pinhub.pinhub.storage.client.models.DiscountedItem;
 import dev.pinhub.pinhub.models.MainActivityViewModel;
 import dev.pinhub.pinhub.storage.client.models.StoreItem;
@@ -45,11 +50,27 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
-    private LocationUtil locationUtil;
+    private LocationGetterUtil locationUtil;
+
+    private ShopClientHelper shopClientHelper;
+    private DiscountClientHelper discountClientHelper;
+
+    public MainActivity()
+    {
+        shopClientHelper = new ShopClientHelperDummy();
+        discountClientHelper = new DiscountClientHelperDummy();
+
+    }
+
+    public MainActivity(ShopClientHelper shopClientHelper, DiscountClientHelper discountClientHelper)
+    {
+        this.shopClientHelper = shopClientHelper;
+        this.discountClientHelper = discountClientHelper;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        locationUtil = new LocationUtil(this);
+        locationUtil = new LocationGetterUtil(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -93,7 +114,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                                 case R.id.action_near_me:
                                     if (!fragmentExists(NEAR_ME_FRAGMENT_NAME)) {
                                         createNearMeFragmentAndChangeToIt();
-                                        generateFakeData();
+                                        setStoreData();
                                     } else if (!fragmentIsVisible(NEAR_ME_FRAGMENT_NAME)) {
                                         Fragment nearMeFragmentFromBackstack = getSupportFragmentManager().findFragmentByTag(NEAR_ME_FRAGMENT_NAME);
                                         changeFragment(nearMeFragmentFromBackstack, NEAR_ME_FRAGMENT_NAME);
@@ -167,20 +188,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Toast.makeText(this, item.getName() + ", hadouken.", Toast.LENGTH_SHORT).show();
     }
 
-    private void generateFakeData() {
-        List<StoreItem> fakeShops = new ArrayList<>();
-
-        StoreItem ikiShop = new StoreItem("Iki", "Baltupiu g. 69", R.drawable.iki_logo, 3);
-        StoreItem maximaShop = new StoreItem("Maxima", "Kalvariju g. 6", R.drawable.iki_logo, 15);
-
-        fakeShops.add(ikiShop);
-        fakeShops.add(maximaShop);
-
-        mainActivityViewModel.setShopCardList(fakeShops);
+    private void setStoreData() {
+        shopClientHelper.getStoresHere(new ShopClientCallback() {
+            @Override
+            public void onCompleteList(List<StoreItem> shopItems) {
+                mainActivityViewModel.setShopCardList(shopItems);
+            }
+        });
     }
 
     public void onShopListFragmentInteraction(StoreItem item){
-
+        final Intent discountedProductListActivity = new Intent(this, DiscountedProductListActivity.class);
+        discountedProductListActivity.putExtra("storeId", item.getId());
+        startActivity(discountedProductListActivity);
     }
 
     /**
@@ -223,7 +243,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      });
 
      */
-
 
     private void updateLocationUI() {
         if (mMap == null) {

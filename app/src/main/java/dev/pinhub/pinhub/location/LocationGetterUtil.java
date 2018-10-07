@@ -1,8 +1,7 @@
-package dev.pinhub.pinhub.LocationUtilities;
+package dev.pinhub.pinhub.location;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,13 +15,13 @@ import com.google.android.gms.tasks.Task;
 import static java.lang.Thread.sleep;
 
 
-public class LocationUtil implements LocationBase {
+public class LocationGetterUtil implements LocationGetter {
     public Boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
-    public Location mLastKnownLocation;
+    public android.location.Location mLastKnownLocation;
     private Activity activity;
 
-    public LocationUtil(Activity activity) {
+    public LocationGetterUtil(Activity activity) {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity.getApplicationContext());
         this.activity = activity;
         getLocationPermission();
@@ -56,8 +55,8 @@ public class LocationUtil implements LocationBase {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if (task.isSuccessful()) {
-                        callback.onComplete((Location) task.getResult());
-                        mLastKnownLocation = (Location) task.getResult();
+                        callback.onComplete((android.location.Location) task.getResult());
+                        mLastKnownLocation = (android.location.Location) task.getResult();
                     }
                 }
             });
