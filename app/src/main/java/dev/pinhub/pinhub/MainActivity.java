@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import dev.pinhub.pinhub.location.LocationCallback;
-import dev.pinhub.pinhub.location.LocationUtil;
+import dev.pinhub.pinhub.location.LocationGetterUtil;
 import dev.pinhub.pinhub.fragments.DiscountedItemFragment;
 import dev.pinhub.pinhub.fragments.SearchViewFragment;
 import dev.pinhub.pinhub.fragments.ShopCardListFragment;
@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private final float DEFAULT_ZOOM = 14.0f;
     private LatLng mDefaultLocation = new LatLng(54.674886, 25.273520);
-    private LocationUtil locationUtil;
+    private LocationGetterUtil locationUtil;
 
     private ShopClientHelper shopClientHelper;
     private DiscountClientHelper discountClientHelper;
@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        locationUtil = new LocationUtil(this);
+        locationUtil = new LocationGetterUtil(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -191,8 +191,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void setStoreData() {
         shopClientHelper.getStoresHere(new ShopClientCallback() {
             @Override
-            public void onCompleteList(List<StoreItem> storeItems) {
-                mainActivityViewModel.setShopCardList(storeItems);
+            public void onCompleteList(List<StoreItem> shopItems) {
+                mainActivityViewModel.setShopCardList(shopItems);
             }
         });
     }

@@ -57,8 +57,8 @@ public class SearchViewFragment extends Fragment {
                 final Intent discountedProductListActivity = new Intent(getActivity(), DiscountedProductListActivity.class);
                 shopClientHelper.getStoresByType(s, new ShopClientCallback() {
                     @Override
-                    public void onCompleteList(List<StoreItem> storeItem) {
-                        discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());
+                    public void onCompleteList(List<StoreItem> shopItems) {
+                        discountedProductListActivity.putExtra("storeId", shopItems.get(0).getId());
                         startActivity(discountedProductListActivity);
                     }
                 });
@@ -82,8 +82,8 @@ public class SearchViewFragment extends Fragment {
 
                     shopClientHelper.getStoresByType(text, new ShopClientCallback() {
                         @Override
-                        public void onCompleteList(List<StoreItem> storeItem) {
-                            discountedProductListActivity.putExtra("storeId", storeItem.get(0).getId());
+                        public void onCompleteList(List<StoreItem> shopItems) {
+                            discountedProductListActivity.putExtra("storeId", shopItems.get(0).getId());
                             startActivity(discountedProductListActivity);
                         }
                     });

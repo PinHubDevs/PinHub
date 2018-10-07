@@ -15,13 +15,13 @@ import com.google.android.gms.tasks.Task;
 import static java.lang.Thread.sleep;
 
 
-public class LocationUtil implements Location {
+public class LocationGetterUtil implements LocationGetter {
     public Boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
     public android.location.Location mLastKnownLocation;
     private Activity activity;
 
-    public LocationUtil(Activity activity) {
+    public LocationGetterUtil(Activity activity) {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity.getApplicationContext());
         this.activity = activity;
         getLocationPermission();
